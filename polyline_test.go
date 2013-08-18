@@ -31,8 +31,8 @@ func TestDecodeIntsErrors(t *testing.T) {
 	}{
 		{"0", "invalid character '0' at position 0"},
 		{"_p~iF~ps|U ", "invalid character ' ' at position 10"},
-		{"_p~i", "incomplete encoded string"},
-		{"_p~iF~ps|u", "incomplete encoded string"},
+		{"_p~i", "unterminated string"},
+		{"_p~iF~ps|u", "unterminated string"},
 	}
 	for _, c := range tests {
 		if _, err := DecodeInts(c.s); err == nil || err.Error() != c.want {

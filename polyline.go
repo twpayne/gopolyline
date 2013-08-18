@@ -5,21 +5,20 @@ import (
 	"strings"
 )
 
-type DecodeError struct {
-	i int
-	c byte
+type InvalidCharacterError struct {
+	pos int
+	char byte
 }
 
-func (de DecodeError) Error() string {
-	return fmt.Sprintf("invalid character %q at position %d", de.c, de.i)
+func (de InvalidCharacterError) Error() string {
+	return fmt.Sprintf("invalid character %q at position %d", de.char, de.pos)
 }
 
-type IncompleteError struct {
-	s string
+type UnterminatedError struct {
 }
 
-func (ie IncompleteError) Error() string {
-	return "incomplete encoded string"
+func (ie UnterminatedError) Error() string {
+	return "unterminated string"
 }
 
 func DecodeUints(s string) ([]uint, error) {
@@ -28,7 +27,7 @@ func DecodeUints(s string) ([]uint, error) {
 	for i, c := range []byte(s) {
 		if c < 95 {
 			if c < 63 {
-				return nil, &DecodeError{i, c}
+				return nil, &InvalidCharacterError{i, c}
 			} else {
 				xs = append(xs, x+(uint(c)-63)<<shift)
 				x = 0
@@ -38,11 +37,11 @@ func DecodeUints(s string) ([]uint, error) {
 			x += (uint(c) - 95) << shift
 			shift += 5
 		} else {
-			return nil, &DecodeError{i, c}
+			return nil, &InvalidCharacterError{i, c}
 		}
 	}
 	if shift != 0 {
-		return nil, &IncompleteError{s}
+		return nil, &UnterminatedError{}
 	}
 	return xs, nil
 }
