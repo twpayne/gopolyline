@@ -174,10 +174,12 @@ func TestDecodeEncodeIntsQuick(t *testing.T) {
 }
 
 func TestDecodeEncodeQuick(t *testing.T) {
+	rand := rand.New(rand.NewSource(0))
 	f := func(es encodedString) bool {
 		s := string(es)
-		xs, err := Decode(s, 2)
-		return err == nil && Encode(xs, 2) == s
+		dim := rand.Intn(3) + 1
+		xs, err := Decode(s, dim)
+		return err == nil && Encode(xs, dim) == s
 	}
 	quick.Check(f, nil)
 }
