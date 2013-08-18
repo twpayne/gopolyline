@@ -9,12 +9,12 @@ import (
 
 // InvalidCharacterError is returned when an invalid character is encountered.
 type InvalidCharacterError struct {
-	pos int
-	char byte
+	Index int
+	Char  byte
 }
 
 func (de InvalidCharacterError) Error() string {
-	return fmt.Sprintf("invalid character %q at position %d", de.char, de.pos)
+	return fmt.Sprintf("invalid character %q at position %d", de.Char, de.Index)
 }
 
 // UnterminatedError is returned when the string is unterminated.
