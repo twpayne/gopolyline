@@ -30,18 +30,15 @@ func DecodeUints(s string) ([]uint, error) {
 	xs := make([]uint, 0)
 	var x, shift uint
 	for i, c := range []byte(s) {
-		if c < 95 {
-			if c < 63 {
-				return nil, &InvalidCharacterError{i, c}
-			} else {
-				xs = append(xs, x+(uint(c)-63)<<shift)
-				x = 0
-				shift = 0
-			}
-		} else if c < 127 {
+		switch {
+		case 63 <= c && c < 95:
+			xs = append(xs, x+(uint(c)-63)<<shift)
+			x = 0
+			shift = 0
+		case 95 <= c && c < 127:
 			x += (uint(c) - 95) << shift
 			shift += 5
-		} else {
+		default:
 			return nil, &InvalidCharacterError{i, c}
 		}
 	}
