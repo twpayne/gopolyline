@@ -1,7 +1,7 @@
 PACKAGE DOCUMENTATION
 
 package polyline
-    import "github.com/twpayne/polyline"
+    import "github.com/twpayne/gopolyline/polyline"
 
     Package polyline provides functions for Google Maps' Encoded Polyline
     Algorithm Format. See
